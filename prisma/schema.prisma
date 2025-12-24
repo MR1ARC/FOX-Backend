@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+model User{
+  userId Int @id @default(autoincrement())
+  emailId String @unique
+  password String 
+  phoneNumber String @unique
+  posts Post[]
+  comments Comment[]
+  votes Vote[]
+  profile Profile?
+  role Role @default(USER)
+  memberships Membership[]
+  communityOwned Community[]
+  
+
+}
+
+model Profile{
+  profileId Int @id @default(autoincrement())
+  owner User @relation(fields: [ownerId], references: [userId])
+  ownerId Int @unique
+  firstName String 
+  lastName String
+  age Int
+  title String @unique
+  karma Int
+  sex String
+
+}
+
+model Community{
+  communityId Int @id @default(autoincrement())
+  owner User @relation(fields: [ownerId], references: [userId])
+  ownerId Int
+  title String
+  discription String
+  rules String
+  createdAt DateTime @default(now())
+  posts Post[]
+  memberships Membership[]
+
+  
+
+}
+
+model Post{
+  postId Int @id @default(autoincrement())
+  author User @relation(fields: [authorId], references: [userId])
+  authorId Int
+  community Community @relation(fields: [communityId], references: [communityId])
+  communityId Int 
+  createdAt DateTime @default(now())
+  title String
+  body String?
+  comments Comment[]
+  votes Vote[]
+
+
+
+}
+
+model Comment{
+  commentId Int @id @default(autoincrement())
+  author User @relation(fields: [authorId], references: [userId])
+  authorId Int
+  createdAt DateTime @default(now())
+  body String
+  post Post @relation(fields: [postId], references: [postId])
+  postId Int
+  parent Comment? @relation("CommentToComment", fields: [parentId], references: [commentId])
+  parentId Int?
+  childrens Comment[] @relation("CommentToComment")
+  votes Vote[]
+  
+
+}
+
+model Vote{
+  voteId Int @id @default(autoincrement())
+  post Post? @relation(fields: [postId], references: [postId])
+  postId Int?
+  user User @relation(fields: [userId], references: [userId])
+  userId Int
+  comment Comment? @relation(fields: [commentId], references: [commentId])
+  commentId Int?
+  value Int @default(0)
+}
+
+model Membership{
+  user User @relation(fields: [userId], references: [userId])
+  userId Int
+  membershipId Int @id @default(autoincrement())
+  community Community @relation(fields: [communityId], references: [communityId])
+  communityId Int
+  membershipAt DateTime @default(now())
+
+  @@unique( name: "uniqueMembership", [userId, communityId])
+}
+
+
+
+
+
+
+
+
+enum Role{
+  ADMIN
+  USER
+  MODERATOR
+}
+
