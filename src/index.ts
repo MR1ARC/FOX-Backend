@@ -1,15 +1,7 @@
-import { prisma, Role } from "./db/prisma";
-import "dotenv/config";
-
-const users = async () => {
-  return await prisma.user.findMany({
-    where: { role: Role.ADMIN },
-    include: {
-      profile: true
-    }
-  })
-}
-
-console.log(await users())
+import { app } from "./app";
+import "dotenv/config"
 
 
+app.listen( process.env.PORT || 8000, ()=>{
+  console.log(`server is running on ${process.env.PORT}`)
+})

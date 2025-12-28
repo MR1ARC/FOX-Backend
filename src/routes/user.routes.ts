@@ -1,0 +1,13 @@
+import { Router } from "express";
+import { loginUser, logOut, registerUser } from "../controllers/user.controller";
+
+const router = Router()
+
+router.route("/register").post(registerUser)
+
+router.route("/login").post(loginUser)
+
+router.route("/logout").post(logOut)
+
+
+export default router
