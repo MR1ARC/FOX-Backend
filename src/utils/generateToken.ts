@@ -10,7 +10,7 @@ export const generateToken = (userId: string, res:Response)=>{
         expiresIn: "7d"
     })
 
-    console.log(token)
+    
 
     res.cookie("jwt", token, {
         httpOnly: true,

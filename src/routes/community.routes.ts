@@ -9,7 +9,7 @@ const router = Router();
 
 router.use(authenticate)
 
-router.route("/create").post(createCommunity)
+router.route("/createCommunity").post(createCommunity)
 
 router.route("/:communityTitle/update").put(updateCommunity)
 

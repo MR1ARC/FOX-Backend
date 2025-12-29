@@ -1,10 +1,10 @@
 
 import { Request, Response } from "express";
 import bcrypt from "bcrypt"
-import { constrainedMemory, send } from "node:process";
+
 import { prisma } from "../db/prisma";
 import { generateToken } from "../utils/generateToken";
-import { stat } from "node:fs";
+
 
 
 
@@ -120,15 +120,6 @@ const loginUser = async(req: Request, res: Response) => {
             const hashedPassword = await bcrypt.compare(password.trim(), checkEmailId?.password )
         
 
-      
-
-            // console.log(password)
-            // console.log(hashedPassword)
-
-            // const salt = await bcrypt.genSalt(10)
-            // const hash = await bcrypt.hash("jhj", salt)
-
-            // console.log(hash)
 
             if (!hashedPassword) return res.status(400).json({"status": "faild", "message" : "password or email is wrong"});
             const token = generateToken(checkEmailId.userId, res)

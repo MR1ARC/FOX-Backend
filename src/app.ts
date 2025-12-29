@@ -36,12 +36,13 @@ import userRouter from "./routes/user.routes"
 
 app.use("/api/v0/users", userRouter)
 
-import postRouter from "./routes/post.routes"
-
-app.use("/api/v0/posts", postRouter)
-
 import communityRouter from "./routes/community.routes"
 
 app.use("/api/v0/communities", communityRouter)
+
+
+import postRouter from "./routes/post.routes"
+
+app.use("/api/v0/post", postRouter)
 
 export{ app };

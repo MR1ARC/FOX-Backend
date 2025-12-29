@@ -25,23 +25,17 @@ const createCommunity = async(req : AuthRequest, res:Response)=>{
 
         if (alreadyExists) return res.status(400).json({message: "community already exists", status: "failed"})
 
-        interface communityData {
-            ownerId : string
-            title : string
-            discription : string
-            rules : string
-
-        }
-
-        const communityData = {
-            ownerId : userId,
-            title,
-            discription,
-            rules
-        }
+        
 
         const community = await prisma.community.create({
-            data: communityData as communityData,
+            data: {
+                title,
+                discription,
+                rules,
+                owner : {
+                    connect : {userId : userId}
+                }
+            }
             
 
         })
@@ -110,33 +104,34 @@ const updateCommunity = async(req:AuthRequest, res:Response)=>{
 
         const {communityTitle} = req.params
 
-        const community = await prisma.community.findUnique({
-            where : {
-                title : communityTitle
-            },
-            select : {
-                ownerId : true
-            },
+        // const community = await prisma.community.findUnique({
+        //     where : {
+        //         title : communityTitle
+        //     },
+        //     select : {
+        //         ownerId : true
+        //     },
     
 
-        })
+        // })
 
-        if (!community) return res.status(400).json({
-            status : "failed",
-            message : "the community doesnt exist anymore"
-        })
+        // if (!community) return res.status(400).json({
+        //     status : "failed",
+        //     message : "the community doesnt exist anymore"
+        // })
         
 
-        if (community?.ownerId !== userId) return res.status(400).json({
-            status : "failed",
-            message : "Not authorised, you cant edit it"
-        });
+        // if (community?.ownerId !== userId) return res.status(400).json({
+        //     status : "failed",
+        //     message : "Not authorised, you cant edit it"
+        // });
 
        
 
-        const communityUpdate = await prisma.community.update({
+        const communityUpdate = await prisma.community.updateMany({
             where : {
-                title : communityTitle
+                title : communityTitle,
+                ownerId : userId
             },
             data : {
                 title,
@@ -145,7 +140,7 @@ const updateCommunity = async(req:AuthRequest, res:Response)=>{
             }
         })
 
-        if (communityUpdate.title !== title || communityUpdate.rules !== rules || communityUpdate.discription !== discription) return res.status(400).json({
+        if (communityUpdate.count === 0) return res.status(400).json({
             status : "faild",
             message : "something went wrong while updating"
         })
