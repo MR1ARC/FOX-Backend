@@ -46,7 +46,7 @@ model Community {
   communityId String          @id @default(uuid())
   owner       User         @relation(fields: [ownerId], references: [userId])
   ownerId     String
-  title       String
+  title       String       @unique
   discription String
   rules       String
   createdAt   DateTime     @default(now())
