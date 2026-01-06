@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { env } from 'process'
+
 import { Response } from 'express'
 
 
@@ -14,8 +14,8 @@ export const generateToken = (userId: string, res:Response)=>{
 
     res.cookie("jwt", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "prooduction",
-        sameSite: true,
+        secure: false,
+        sameSite: 'lax',
         maxAge: (1000 * 60 * 60 * 24) * 7
     } )
     return token;

@@ -46,17 +46,6 @@ const createCommunity = async(req : AuthRequest, res:Response)=>{
 
         })
 
-        // interface findCommunity {
-        //     ownerId : string
-        // }
-
-        // const findCommunity = await prisma.community.findUnique({
-        //     where : {
-        //         ownerId : userId  
-        //     } as any
-        // })
-
-        // console.log(findCommunity)
 
         res.status(200).json({
             status : "success",
@@ -104,29 +93,6 @@ const updateCommunity = async(req:AuthRequest, res:Response)=>{
 
         const {communityTitle} = req.params
 
-        // const community = await prisma.community.findUnique({
-        //     where : {
-        //         title : communityTitle
-        //     },
-        //     select : {
-        //         ownerId : true
-        //     },
-    
-
-        // })
-
-        // if (!community) return res.status(400).json({
-        //     status : "failed",
-        //     message : "the community doesnt exist anymore"
-        // })
-        
-
-        // if (community?.ownerId !== userId) return res.status(400).json({
-        //     status : "failed",
-        //     message : "Not authorised, you cant edit it"
-        // });
-
-       
 
         const communityUpdate = await prisma.community.updateMany({
             where : {
@@ -203,7 +169,8 @@ const deleteCommunity = async(req: AuthRequest, res: Response )=>{
     } catch (error: any) {
         res.status(400).json({
             "status" : "failed",
-            "message" : error.message
+            "message" : error.message,
+            "err": error
         })
     }
 }

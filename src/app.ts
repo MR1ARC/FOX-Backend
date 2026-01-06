@@ -20,18 +20,6 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-// const users = async () => {
-//   return await prisma.user.findMany({
-//     where: { role: Role.ADMIN },
-//     include: {
-//       profile: true
-//     }
-//   })
-// }
-
-// console.log(await users())
-
-//route import
 import userRouter from "./routes/user.routes"
 
 app.use("/api/v0/users", userRouter)

@@ -52,17 +52,6 @@ const createPost = async(req : AuthRequest, res:Response)=>{
 
         })
 
-        // interface findCommunity {
-        //     ownerId : string
-        // }
-
-        // const findCommunity = await prisma.community.findUnique({
-        //     where : {
-        //         ownerId : userId  
-        //     } as any
-        // })
-
-        // console.log(findCommunity)
 
         res.status(200).json({
             status : "success",
@@ -180,10 +169,11 @@ const deletePost = async(req: AuthRequest, res: Response )=>{
             }
         })
 
+        console.log(postDelete)
 
         if (postDelete.count === 0) return res.status(400).json({
             status : "faild",
-            message : "something went wrong while updating"
+            message : "something went wrong while deleting"
         })
 
         res.status(200).json({
